@@ -2,7 +2,6 @@
 __pycache__/
 *.py[cod]
 *$py.class
-.idea
 
 # C extensions
 *.so
@@ -61,3 +60,6 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+# pycharm
+.idea
