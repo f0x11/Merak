@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>hot_word</title>
+    <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+</head>
+<body>
+<button id="get-hot">获取今日热词</button>
+<table>
+    <thead>
+        <tr>
+            <td>#</td>
+            <td>word</td>
+            <td>date</td>
+    </tr>
+    </thead>
+    <tbody>
+    {% for hot_word in hot_word_list %}
+        <tr>
+            <td>{{ hot_word.number }}</td>
+            <td>{{ hot_word.word }}</td>
+            <td>{{ hot_word.date }}</td>
+    </tr>
+    {% end %}
+    </tbody>
+</table>
+<script>
+    $(function() {
+        $("#get-hot").on("click", function () {
+            $.ajax({
+                url: "",
+                type: "post",
+                dataType: "json",
+                success: function(res) {
+                    console.log(res);
+                    window.location.reload();
+                }
+            })
+        });
+    });
+</script>
+</body>
+</html>
