@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import logging
+
 from bs4 import BeautifulSoup
-import requests
+from tornado import gen
+from tornado.httpclient import AsyncHTTPClient
+
 from data.models import HotWord
 from data.session_mysql import SessionCM
 
@@ -13,9 +17,15 @@ headers = {
 }
 
 
+@gen.coroutine
 def capture_hot_words():
-    response = requests.get('http://weixin.sogou.com/', headers=headers)
-    content = response.content
+    http_client = AsyncHTTPClient()
+    response = yield http_client.fetch('http://weixin.sogou.com/', headers=headers)
+    if response.error:
+        logging.error("Error: ", response.error)
+        return
+
+    content = response.body
     soup = BeautifulSoup(content, "html.parser")
     top_number_list = soup.find_all(attrs={'class': 'top-num'})
 
@@ -32,4 +42,4 @@ def capture_hot_words():
 
 
 if __name__ == '__main__':
-    main()
+    capture_hot_words()

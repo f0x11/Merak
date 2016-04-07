@@ -3,6 +3,8 @@
 import json
 
 import tornado.web
+from tornado import gen
+
 from data.models import HotWord
 from data.session_mysql import SessionCM
 from spider.hot_word import capture_hot_words
@@ -18,6 +20,7 @@ class HotWordHandler(tornado.web.RequestHandler):
 
             self.render("index.html", hot_word_list=hot_word_list)
 
+    @gen.coroutine
     def post(self):
-        capture_hot_words()
+        yield capture_hot_words()
         self.write(json.dumps({'code': 0, 'msg': 'ok'}))
