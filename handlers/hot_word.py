@@ -18,7 +18,7 @@ class HotWordHandler(tornado.web.RequestHandler):
             hot_word_list = db_session.query(HotWord)\
                 .order_by(HotWord.date.desc(), HotWord.number.asc()).all()
 
-            self.render("index.html", hot_word_list=hot_word_list)
+            self.render("hot_word.html", hot_word_list=hot_word_list)
 
     @gen.coroutine
     def post(self):

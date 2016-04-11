@@ -31,8 +31,11 @@ def capture_hot_words():
 
     with SessionCM() as db_session:
         for top_number in top_number_list:
-            hot_item = HotWord(number=int(top_number.string),
-                               word=top_number.parent.attrs['title'])
+            hot_item = HotWord(
+                number=int(top_number.string),
+                word=top_number.parent.attrs['title'],
+                link=top_number.parent.attrs['href']
+            )
 
             try:
                 db_session.add(hot_item)
