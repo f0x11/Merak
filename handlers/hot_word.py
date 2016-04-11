@@ -16,7 +16,7 @@ class HotWordHandler(tornado.web.RequestHandler):
     def get(self):
         with SessionCM() as db_session:
             hot_word_list = db_session.query(HotWord)\
-                .order_by(HotWord.created_time.desc()).all()
+                .order_by(HotWord.date.desc(), HotWord.number.asc()).all()
 
             self.render("index.html", hot_word_list=hot_word_list)
 
