@@ -19,9 +19,8 @@
     {% for hot_word in hot_word_list %}
         <tr>
             <td>{{ hot_word.number }}</td>
-            <td>{{ hot_word.word }}</td>
+            <td><a href="{{ hot_word.link }}">{{ hot_word.word }}</a></td>
             <td>{{ hot_word.date }}</td>
-            <td>{{ hot_word.link }}</td>
     </tr>
     {% end %}
     </tbody>

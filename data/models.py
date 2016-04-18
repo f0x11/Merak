@@ -26,3 +26,25 @@ class HotWord(DeclarativeBase):
             'link': self.link,
             'date': self.date.strftime('%Y-%m-%d')
         }
+
+
+class Domain(DeclarativeBase):
+    __tablename__ = 'domain'
+
+    content = Column(VARCHAR(255), nullable=False)
+
+    def to_json(self):
+        return {
+            self.content
+        }
+
+
+class LastDomain(DeclarativeBase):
+    __tablename__ = 'last_domain'
+
+    content = Column(VARCHAR(255), nullable=False)
+
+    def to_json(self):
+        return {
+            self.content
+        }
