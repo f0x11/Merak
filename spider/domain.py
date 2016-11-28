@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import json
 import logging
+import traceback
 
 import tornado.ioloop
 from tornado import gen
@@ -17,7 +18,8 @@ headers = {
                   'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36',
 }
 
-chars = '0123456789'
+# chars = '0123456789'
+chars = 'abcdefghijklmnopqrstuvwxyz'
 # chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789'
 
 total = 0
@@ -68,11 +70,21 @@ def gen_domain_list(start_domain="00000"):
 
 @gen.coroutine
 def capture_domain(domain):
-    http_client = AsyncHTTPClient()
-    response = yield http_client.fetch('https://www.godaddy.com/domainsapi/v1/search/exact?q={0}.com'.format(domain),
-                                       headers=headers)
+    try:
+        http_client = AsyncHTTPClient()
+        response = yield http_client.fetch(
+            'https://www.godaddy.com/domainsapi/v1/search/exact?q={0}.com'.format(domain),
+            headers=headers)
+    except:
+        logging.error(traceback.format_exc())
+        return
+
     if response.error:
-        logging.error("Error: ", response.error)
+        logging.error("Error: %s", response.error)
+        return
+
+    if not response.body:
+        logging.error("Error: body is null, domain=%s", domain)
         return
 
     content = json.loads(response.body.decode())
@@ -97,11 +109,11 @@ def capture_domains():
         if last_domain_item:
             start_domain = last_domain_item.content
         else:
-            start_domain = '00000'
+            start_domain = chars[0] * 5
 
     for domain in gen_domain_list(start_domain):
         yield capture_domain(domain)
-        yield gen.sleep(3)
+        yield gen.sleep(1)
 
     tornado.ioloop.IOLoop.instance().stop()
 
